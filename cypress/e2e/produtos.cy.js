@@ -32,7 +32,7 @@ describe('Testes da Funcionalidade produtos', () => {
             expect(response.status).to.equal(201)
             expect(response.body.message).to.equal('Cadastro realizado com sucesso')
         })
-    });
+    })
 
     it('Deve validar mensagem de erro ao cadastrar usuario repetido - POST', () => {
         let usuarios = 'Produto EBAC' + Math.floor(Math.random() * 1000000000) 
