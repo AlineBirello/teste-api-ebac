@@ -16,7 +16,7 @@ describe('Testes da Funcionalidade produtos', () => {
             expect(response.body).to.have.property('usuarios')
             expect(response.duration).to.be.lessThan(20)
         })
-    });
+    })
 
     it('Deve cadastrar usuario com sucesso - POST', () => {
         cy.request({
