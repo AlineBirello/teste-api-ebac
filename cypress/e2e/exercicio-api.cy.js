@@ -20,7 +20,7 @@ describe('Testes da Funcionalidade Usuários', () => {
   });
 
   it('Deve cadastrar um usuário com sucesso', () => {
-    cy.request({
+      cy.request({
       method: 'POST',
       url: 'usuarios',
       body: {
@@ -32,6 +32,7 @@ describe('Testes da Funcionalidade Usuários', () => {
   }).then((response) => {
       expect(response.status).to.equal(201)
       expect(response.body.message).to.equal('Cadastro realizado com sucesso')
+    
   })
 });
 
@@ -54,14 +55,14 @@ describe('Testes da Funcionalidade Usuários', () => {
 
   it('Deve editar um usuário previamente cadastrado', () => {
     cy.request({
-      method: 'GET',
-      url: 'usuarios/${id}',
+      method: 'PUT',
+      url: 'usuarios' + '/0uxuPY0cbmQhpEz1',
       body: {
-        "nome": 'Fulano da Silva', 
-        "email": 'jose@q.br', 
-        "password": '132',
-        "administrador": 'true',                
-        }
+      "nome": "Fulano da Silva v1",
+      "email": "beltrano@qa.com.br",
+      "password": "teste",
+      "administrador": "true",
+    }
   }).then((response) => {
       expect(response.status).to.equal(200)
       expect(response.body.message).to.equal('Registro alterado com sucesso')
@@ -70,12 +71,17 @@ describe('Testes da Funcionalidade Usuários', () => {
 
   it('Deve deletar um usuário previamente cadastrado', () => {
     cy.request({
-      method: 'DELETE',
-      url:'usuarios/${id}'
-
-    }).should((response) =>{
-      expect(response.status).to.equal(200)
-      expect(response.message).equal('Registro excluído com sucesso | Nenhum registro excluído')
+      url: '/usuarios',
+      method: 'GET'
+  }).then((response) => {
+      let id = response.body.usuarios[1]._id
+      cy.request({
+          url: 'usuarios/' + id,
+          method: 'DELETE'
+      }).should((response) => {
+          expect(response.status).to.eq(200)
+          expect(response.body.message).to.eql("Registro excluído com sucesso")
+    });
     });
   });
 });
