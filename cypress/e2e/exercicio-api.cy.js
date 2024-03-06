@@ -19,33 +19,29 @@ describe('Testes da Funcionalidade Usuários', () => {
     })
   });
 
-  it('Deve cadastrar um usuário com sucesso', () => {
+  it.only('Deve cadastrar um usuário com sucesso', () => {
+    let usuarios = 'Usuario EBAC' + Math.floor(Math.random() * 1000000)    
+    cy.get('cadastroUsuario', (usuarios, email, senha, admin) => {
       cy.request({
-      method: 'POST',
-      url: 'usuarios',
-      body: {
-          "nome": "Exercicio EBAC7",
-          "email": "EBAC7@qa.com.br",
-          "password": "teste",
-          "administrador": "true"
-        }
-  }).then((response) => {
+          method: 'POST',
+          url: 'usuarios',
+          body: {
+              nome: usuarios,
+              email: 'email',
+              password: 'senha',
+              administrador: 'admin'
+            }          
+          }).then((response) => {
       expect(response.status).to.equal(201)
       expect(response.body.message).to.equal('Cadastro realizado com sucesso')
-    
-  })
+              })
+  });
 });
 
   it('Deve validar um usuário com email inválido', () => {
     cy.request({
       method: 'GET',
       url: 'usuarios/${id}',
-      body: {
-          "nome": "Exercicio EBAC2",
-          "email": "beltrano",
-          "password": "teste",
-          "administrador": "true"
-        },
         failOnStatusCode: false
   }).then((response) => {
       expect(response.status).to.equal(400)
@@ -54,6 +50,7 @@ describe('Testes da Funcionalidade Usuários', () => {
   });
 
   it('Deve editar um usuário previamente cadastrado', () => {
+    cy.cadastrarUsuarios()
     cy.request({
       method: 'PUT',
       url: 'usuarios' + '/0uxuPY0cbmQhpEz1',
