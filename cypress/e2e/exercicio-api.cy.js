@@ -1,6 +1,8 @@
 /// <reference types="cypress" />
 import contrato from '../contrato/usuarios.contrato'
 
+let token
+
 describe('Testes da Funcionalidade Usuários', () => {
 
   it('Deve validar contrato de usuários com sucesso', () => {
@@ -19,24 +21,23 @@ describe('Testes da Funcionalidade Usuários', () => {
     })
   });
 
-  it.only('Deve cadastrar um usuário com sucesso', () => {
-    let usuarios = 'Usuario EBAC' + Math.floor(Math.random() * 1000000)    
-    cy.get('cadastroUsuario', (usuarios, email, senha, admin) => {
+  it('Deve cadastrar um usuário com sucesso', () => {
+    let email = `birello@ebac${Math.floor(Math.random() * 1000000)}.com`
       cy.request({
           method: 'POST',
           url: 'usuarios',
           body: {
-              nome: usuarios,
-              email: 'email',
-              password: 'senha',
-              administrador: 'admin'
-            }          
+              nome: 'Birello',
+              email: email,
+              password: 'teste123',
+              administrador: 'true'
+            },          
+            headers: {authorization: token}
           }).then((response) => {
       expect(response.status).to.equal(201)
       expect(response.body.message).to.equal('Cadastro realizado com sucesso')
               })
   });
-});
 
   it('Deve validar um usuário com email inválido', () => {
     cy.request({
@@ -49,16 +50,15 @@ describe('Testes da Funcionalidade Usuários', () => {
   })
   });
 
-  it('Deve editar um usuário previamente cadastrado', () => {
-    cy.cadastrarUsuarios()
-    cy.request({
+  it.only('Deve editar um usuário previamente cadastrado', () => {   
+      cy.request({
       method: 'PUT',
-      url: 'usuarios' + '/0uxuPY0cbmQhpEz1',
+      url: 'usuarios',
       body: {
-      "nome": "Fulano da Silva v1",
-      "email": "beltrano@qa.com.br",
-      "password": "teste",
-      "administrador": "true",
+      "nome": 'birello',
+      "email": 'email',
+      "password": 'teste123',
+      "administrador": 'true',
     }
   }).then((response) => {
       expect(response.status).to.equal(200)
@@ -71,7 +71,6 @@ describe('Testes da Funcionalidade Usuários', () => {
       url: '/usuarios',
       method: 'GET'
   }).then((response) => {
-      let id = response.body.usuarios[1]._id
       cy.request({
           url: 'usuarios/' + id,
           method: 'DELETE'
