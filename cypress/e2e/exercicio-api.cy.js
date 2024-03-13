@@ -50,12 +50,14 @@ describe('Testes da Funcionalidade Usuários', () => {
   })
   });
 
-  it.only('Deve editar um usuário previamente cadastrado', () => {   
+  it('Deve editar um usuário previamente cadastrado', () => {  
+    cy.cadastroUsuario()
+    let email = `modificar01@teste${Math.floor(Math.random() * 1010000)}.com` 
       cy.request({
       method: 'PUT',
-      url: 'usuarios',
+      url: '/usuarios',
       body: {
-      "nome": 'birello',
+      "nome": 'modificar01',
       "email": 'email',
       "password": 'teste123',
       "administrador": 'true',
@@ -66,17 +68,18 @@ describe('Testes da Funcionalidade Usuários', () => {
   }) 
   });
 
-  it('Deve deletar um usuário previamente cadastrado', () => {
+  it.only('Deve deletar um usuário previamente cadastrado', () => {
+    let email = `modificar@teste${Math.floor(Math.random() * 1000000)}.com`
     cy.request({
-      url: '/usuarios',
+      url: '/usuarios/',
       method: 'GET'
   }).then((response) => {
       cy.request({
-          url: 'usuarios/' + id,
+        url: '/usuarios/{_id}',
           method: 'DELETE'
       }).should((response) => {
           expect(response.status).to.eq(200)
-          expect(response.body.message).to.eql("Registro excluído com sucesso")
+          expect(response.body.message).to.equal("Registro excluído com sucesso")
     });
     });
   });

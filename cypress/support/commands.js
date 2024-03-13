@@ -1,12 +1,13 @@
 Cypress.Commands.add('cadastroUsuario', (usuarios, email, senha, admin) => {
+ let modificar = `modificar01@teste${Math.floor(Math.random() * 10)}.com`
   cy.request({
       method: 'POST',
-      url: '/usuarios',
+      url: 'usuarios',
       body: {
-          nome: usuarios,
-          email: email,
-          password: senha,
-          administrador: admin
+        "nome": 'modificar',
+        "email": 'modificar01',
+        "password": 'teste123',
+        "administrador": 'true',
       }   
     });
   });
